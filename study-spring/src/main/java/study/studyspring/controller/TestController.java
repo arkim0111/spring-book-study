@@ -2,6 +2,8 @@ package study.studyspring.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import study.studyspring.dto.ResponseDTO;
+import study.studyspring.dto.TestRequestBodyDTO;
 
 import java.util.ArrayList;
 import java.util.List;
