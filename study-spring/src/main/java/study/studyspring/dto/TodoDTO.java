@@ -1,5 +1,11 @@
 package study.studyspring.dto;
 
+// dto 사용이유?
+// http 응답 반환할 때, 비즈니스 로직을 캡슐화하거나 추가적인 정보를 함께 반환하기 위해 사용함
+
+// 컨트롤러는 유저에게서 todoDTO를 요청 바디로 넘겨받고, todoEntity로 변환해 저장해야 하며,
+// todoService의 create()이 리턴하는 todoEntity를 todoDTO로 변환해 리턴해야한다.
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +29,14 @@ public class TodoDTO {
         this.id = entity.getId();
         this.title = entity.getTitle();
         this.done = entity.isDone();
+    }
+
+    public static TodoEntity toEntity(final TodoDTO dto) { //dto를 entity로 변환하기 위함
+         return TodoEntity.builder()
+                .id(dto.getId())
+                .title(dto.getTitle())
+                .done(dto.isDone())
+                .build();
     }
 
 }
