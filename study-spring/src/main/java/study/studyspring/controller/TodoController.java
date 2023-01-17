@@ -10,6 +10,7 @@ import study.studyspring.service.TodoService;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("todo")
@@ -45,9 +46,19 @@ public class TodoController {
             // 4. 서비스를 이용해 todoEntity 생성
             List<TodoEntity> entities = service.create(entity);
 
-            // 5. 자바 스트림을 이용해 리턴된 엔티티 리스트를 todoDTO 리스트로 변환
+            // 5. 자바 스트림을 이용해 리턴된 엔티티 리스트를 todoDTO 리스트로 변환 entity -> dto
+            List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
 
+            // 6. 변환된 TodoDTO 리스트를 이용해 ResponseDTO 초기화
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
 
+            // 7. reponseDTO 리턴
+            return ResponseEntity.ok().body(response);
+        } catch (Exception e) {
+            // 8. 에러 나면 dto 대신 메세지 띄우기
+            String error = e.getMessage();
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
+        }
     }
-
 }
