@@ -104,4 +104,22 @@ public class TodoController {
 
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteTODO(@RequestBody TodoDTO dto) {
+
+        try {
+            String temporaryUserId = "temporary-user";
+
+            // 1. TodoEntity로 변환
+            TodoEntity entity = TodoDTO.toEntity(dto);
+
+            // 2. 임시 유저 아이디 설정.
+            entity.setUserId(temporaryUserId);
+
+            // 3. 서비스를 이용해 entity 삭제
+            service.delete(entity);
+        }
+
+    }
+
 }
