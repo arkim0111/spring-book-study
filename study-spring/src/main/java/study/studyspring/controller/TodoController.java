@@ -117,7 +117,21 @@ public class TodoController {
             entity.setUserId(temporaryUserId);
 
             // 3. 서비스를 이용해 entity 삭제
-            service.delete(entity);
+            List<TodoEntity> entities = service.delete(entity);
+
+            // 4. 자바 스트림을 이용해 리턴된 엔티티 리스트를 Tododto 리스트로 변환
+            List<TodoDTO> dtos = entities.stream().map(TodoDTO::new).collect(Collectors.toList());
+
+            // 5. 변환된 todoList 이용해서 responseDTO 초기화
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().data(dtos).build();
+
+            // 6. ResponseDTO return
+            return ResponseEntity.ok().body(response);
+
+        } catch (Exception e) {
+            String error = e.getMessage();
+            ResponseDTO<TodoDTO> response = ResponseDTO.<TodoDTO>builder().error(error).build();
+            return ResponseEntity.badRequest().body(response);
         }
 
     }
